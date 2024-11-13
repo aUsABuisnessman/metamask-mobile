@@ -1,11 +1,11 @@
 import { useSelector } from 'react-redux';
 import { useState, useEffect, useCallback } from 'react';
-import { selectSelectedInternalAccountChecksummedAddress } from '../../../../selectors/accountsController';
+import { selectSelectedInternalAccountFormattedAddress } from '../../../../selectors/accountsController';
 import { useStakeContext } from './useStakeContext';
 
 const useStakingEligibility = () => {
   const selectedAddress =
-    useSelector(selectSelectedInternalAccountChecksummedAddress) || '';
+    useSelector(selectSelectedInternalAccountFormattedAddress) || '';
   const { stakingApiService } = useStakeContext();
 
   const [isEligible, setIsEligible] = useState<boolean>(false);

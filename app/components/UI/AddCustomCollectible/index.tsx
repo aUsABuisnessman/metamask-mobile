@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  Alert,
-  Text,
-  TextInput,
-  View,
-  StyleSheet,
-} from 'react-native';
+import { Alert, Text, TextInput, View, StyleSheet } from 'react-native';
 import { fontStyles } from '../../../styles/common';
 import Engine from '../../../core/Engine';
 import { strings } from '../../../../locales/i18n';
@@ -19,7 +13,7 @@ import { MetaMetricsEvents } from '../../../core/Analytics';
 import { useTheme } from '../../../util/theme';
 import { NFTImportScreenSelectorsIDs } from '../../../../e2e/selectors/wallet/ImportNFTView.selectors';
 import { selectChainId } from '../../../selectors/networkController';
-import { selectSelectedInternalAccountChecksummedAddress } from '../../../selectors/accountsController';
+import { selectSelectedInternalAccountFormattedAddress } from '../../../selectors/accountsController';
 import { getDecimalChainId } from '../../../util/networks';
 import { useMetrics } from '../../../components/hooks/useMetrics';
 
@@ -90,7 +84,7 @@ const AddCustomCollectible = ({
   const styles = createStyles(colors);
 
   const selectedAddress = useSelector(
-    selectSelectedInternalAccountChecksummedAddress,
+    selectSelectedInternalAccountFormattedAddress,
   );
   const chainId = useSelector(selectChainId);
 
@@ -223,10 +217,7 @@ const AddCustomCollectible = ({
   };
 
   return (
-    <View
-      style={styles.wrapper}
-      testID={NFTImportScreenSelectorsIDs.CONTAINER}
-    >
+    <View style={styles.wrapper} testID={NFTImportScreenSelectorsIDs.CONTAINER}>
       <ActionView
         cancelText={strings('add_asset.collectibles.cancel_add_collectible')}
         confirmText={strings('add_asset.collectibles.add_collectible')}

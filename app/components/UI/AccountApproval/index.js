@@ -1,10 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import {
-  InteractionManager,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { InteractionManager, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { strings } from '../../../../locales/i18n';
 import Text from '../../../component-library/components/Texts/Text';
@@ -26,7 +22,7 @@ import Routes from '../../../constants/navigation/Routes';
 import Engine from '../../../core/Engine';
 import SDKConnect from '../../../core/SDKConnect/SDKConnect';
 import { selectAccountsLength } from '../../../selectors/accountTrackerController';
-import { selectSelectedInternalAccountChecksummedAddress } from '../../../selectors/accountsController';
+import { selectSelectedInternalAccountFormattedAddress } from '../../../selectors/accountsController';
 import {
   selectChainId,
   selectProviderType,
@@ -403,7 +399,7 @@ class AccountApproval extends PureComponent {
 const mapStateToProps = (state) => ({
   accountsLength: selectAccountsLength(state),
   tokensLength: selectTokensLength(state),
-  selectedAddress: selectSelectedInternalAccountChecksummedAddress(state),
+  selectedAddress: selectSelectedInternalAccountFormattedAddress(state),
   networkType: selectProviderType(state),
   chainId: selectChainId(state),
 });

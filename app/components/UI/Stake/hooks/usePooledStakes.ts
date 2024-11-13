@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { useState, useEffect, useMemo } from 'react';
-import { selectSelectedInternalAccountChecksummedAddress } from '../../../../selectors/accountsController';
+import { selectSelectedInternalAccountFormattedAddress } from '../../../../selectors/accountsController';
 import { selectChainId } from '../../../../selectors/networkController';
 import { hexToNumber } from '@metamask/utils';
 import { PooledStake } from '@metamask/stake-sdk';
@@ -17,7 +17,7 @@ export enum StakeAccountStatus {
 const usePooledStakes = () => {
   const chainId = useSelector(selectChainId);
   const selectedAddress =
-    useSelector(selectSelectedInternalAccountChecksummedAddress) || '';
+    useSelector(selectSelectedInternalAccountFormattedAddress) || '';
   const { stakingApiService } = useStakeContext(); // Get the stakingApiService directly from context
   const [pooledStakesData, setPooledStakesData] = useState({} as PooledStake);
   const [exchangeRate, setExchangeRate] = useState('');

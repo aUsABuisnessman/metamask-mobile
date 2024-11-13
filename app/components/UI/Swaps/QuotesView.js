@@ -103,7 +103,7 @@ import {
 } from '../../../selectors/currencyRateController';
 import { selectAccounts } from '../../../selectors/accountTrackerController';
 import { selectContractBalances } from '../../../selectors/tokenBalancesController';
-import { selectSelectedInternalAccountChecksummedAddress } from '../../../selectors/accountsController';
+import { selectSelectedInternalAccountFormattedAddress } from '../../../selectors/accountsController';
 import { resetTransaction, setRecipient } from '../../../actions/transaction';
 import { createBuyNavigationDetails } from '../Ramp/routes/utils';
 import { SwapsViewSelectors } from '../../../../e2e/selectors/swaps/SwapsView.selectors';
@@ -1011,7 +1011,9 @@ function SwapsQuotesView({
             CHAIN_IDS.LINEA_SEPOLIA,
           ].includes(chainId)
         ) {
-          Logger.log('Delaying submitting trade tx to make Linea confirmation more likely',);
+          Logger.log(
+            'Delaying submitting trade tx to make Linea confirmation more likely',
+          );
           const waitPromise = new Promise((resolve) =>
             setTimeout(resolve, 5000),
           );
@@ -2156,7 +2158,11 @@ function SwapsQuotesView({
             </QuotesSummary.Body>
           </QuotesSummary>
         )}
-        <StyledButton type="confirm" onPress={handleCompleteSwap} disabled={unableToSwap || isHandlingSwap || isAnimating}>
+        <StyledButton
+          type="confirm"
+          onPress={handleCompleteSwap}
+          disabled={unableToSwap || isHandlingSwap || isAnimating}
+        >
           {strings('swaps.swap')}
         </StyledButton>
         <TouchableOpacity onPress={handleTermsPress} style={styles.termsButton}>
@@ -2345,7 +2351,7 @@ const mapStateToProps = (state) => ({
   chainId: selectChainId(state),
   ticker: selectTicker(state),
   balances: selectContractBalances(state),
-  selectedAddress: selectSelectedInternalAccountChecksummedAddress(state),
+  selectedAddress: selectSelectedInternalAccountFormattedAddress(state),
   conversionRate: selectConversionRate(state),
   currentCurrency: selectCurrentCurrency(state),
   isInPolling: selectSwapsIsInPolling(state),
