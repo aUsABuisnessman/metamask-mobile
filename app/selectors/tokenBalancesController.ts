@@ -1,10 +1,10 @@
 /* eslint-disable import/prefer-default-export */
+import { Hex } from '@metamask/utils';
 import { createSelector } from 'reselect';
 import { RootState } from '../reducers';
 import { TokenBalancesControllerState } from '@metamask/assets-controllers';
 import { selectChainId } from './networkController';
 import { selectSelectedInternalAccountAddress } from './accountsController';
-import { HexString } from '../components/UI/Tokens/types';
 
 const selectTokenBalancesControllerState = (state: RootState) =>
   state.engine.backgroundState.TokenBalancesController;
@@ -25,7 +25,7 @@ export const selectContractBalances = createSelector(
     chainId: string,
     address,
   ) =>
-    tokenBalancesControllerState.tokenBalances?.[address as HexString]?.[
+    tokenBalancesControllerState.tokenBalances?.[address as Hex]?.[
       chainId as `0x${string}`
     ] ?? {},
 );

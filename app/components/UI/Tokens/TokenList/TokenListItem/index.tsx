@@ -47,12 +47,12 @@ import AssetElement from '../../../AssetElement';
 import NetworkMainAssetLogo from '../../../NetworkMainAssetLogo';
 import NetworkAssetLogo from '../../../NetworkAssetLogo';
 import images from 'images/image-icons';
-import { TokenI, HexString } from '../../types';
+import { TokenI } from '../../types';
 import { strings } from '../../../../../../locales/i18n';
 import { ScamWarningIcon } from '../ScamWarningIcon';
 import { ScamWarningModal } from '../ScamWarningModal';
 import { StakeButton } from '../../../Stake/components/StakeButton';
-import { CHAIN_ID_TOKEN_IMAGE_MAP } from '../../../../../util/networks/networks';
+import { CustomNetworkImgMapping } from '../../../../../util/networks/customNetworks';
 import useStakingChain from '../../../Stake/hooks/useStakingChain';
 import {
   PopularList,
@@ -114,19 +114,17 @@ export const TokenListItem = ({
 
   if (isPortfolioViewEnabled) {
     const tokenPercentageChange = asset.address
-      ? multiChainMarketData?.[asset.chainId as HexString]?.[
-          asset.address as HexString
-        ]?.pricePercentChange1d
+      ? multiChainMarketData?.[asset.chainId as Hex]?.[asset.address as Hex]
+          ?.pricePercentChange1d
       : 0;
 
     pricePercentChange1d = asset.isNative
-      ? multiChainMarketData?.[asset.chainId as HexString]?.[
-          zeroAddress() as HexString
-        ]?.pricePercentChange1d
+      ? multiChainMarketData?.[asset.chainId as Hex]?.[zeroAddress() as Hex]
+          ?.pricePercentChange1d
       : tokenPercentageChange;
   } else {
     pricePercentChange1d = itemAddress
-      ? tokenExchangeRates?.[itemAddress as HexString]?.pricePercentChange1d
+      ? tokenExchangeRates?.[itemAddress as Hex]?.pricePercentChange1d
       : tokenExchangeRates?.[zeroAddress() as Hex]?.pricePercentChange1d;
   }
 
@@ -190,7 +188,7 @@ export const TokenListItem = ({
   const { isStakingSupportedChain } = useStakingChain();
 
   const networkBadgeSource = useCallback(
-    (currentChainId: HexString) => {
+    (currentChainId: Hex) => {
       if (isTestNet(chainId)) return getTestNetImageByChainId(chainId);
 
       if (!isPortfolioViewEnabled) {
@@ -198,8 +196,8 @@ export const TokenListItem = ({
 
         if (isLineaMainnet) return images['LINEA-MAINNET'];
 
-        if (CHAIN_ID_TOKEN_IMAGE_MAP[chainId]) {
-          return CHAIN_ID_TOKEN_IMAGE_MAP[chainId];
+        if (CustomNetworkImgMapping[chainId]) {
+          return CustomNetworkImgMapping[chainId];
         }
 
         return ticker ? images[ticker] : undefined;
@@ -215,7 +213,7 @@ export const TokenListItem = ({
         (networkConfig) => networkConfig.chainId === currentChainId,
       );
 
-      const customNetworkImg = CHAIN_ID_TOKEN_IMAGE_MAP[currentChainId];
+      const customNetworkImg = CustomNetworkImgMapping[currentChainId];
 
       const popularNetwork = PopularList.find(
         (networkConfig) => networkConfig.chainId === currentChainId,
@@ -250,7 +248,7 @@ export const TokenListItem = ({
     if (isPortfolioViewEnabled && asset.isNative) {
       return (
         <NetworkAssetLogo
-          chainId={asset.chainId as HexString}
+          chainId={asset.chainId as Hex}
           style={styles.ethLogo}
           ticker={asset.symbol}
           big={false}
@@ -291,7 +289,7 @@ export const TokenListItem = ({
         badgeElement={
           <Badge
             variant={BadgeVariant.Network}
-            imageSource={networkBadgeSource(chainId as HexString)}
+            imageSource={networkBadgeSource(chainId as Hex)}
             name={networkName}
           />
         }

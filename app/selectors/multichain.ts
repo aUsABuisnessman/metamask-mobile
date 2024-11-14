@@ -1,3 +1,4 @@
+import { Hex } from '@metamask/utils';
 import { RootState } from '../reducers';
 import I18n from '../../locales/i18n';
 import {
@@ -15,7 +16,7 @@ import {
 } from './currencyRateController';
 
 import { AssetType } from '../components/UI/SimulationDetails/types';
-import { HexString, TokenI } from '../components/UI/Tokens/types';
+import { TokenI } from '../components/UI/Tokens/types';
 
 import { getTicker } from '../util/transactions';
 import {
@@ -53,7 +54,7 @@ interface AllTokens {
   [chainId: string]: TokensByAddress;
 }
 
-export function getNativeTokenInfo(state: RootState, chainId: HexString) {
+export function getNativeTokenInfo(state: RootState, chainId: Hex) {
   const networkConfigurationsByChainId = selectNetworkConfigurations(state);
   const networkConfig = networkConfigurationsByChainId?.[chainId];
 
@@ -127,14 +128,14 @@ export function getSelectedAccountTokensAcrossChains(state: RootState): {
     // Add non-native tokens
     const userTokens = allTokens[chainId]?.[selectedAddress] || [];
     const ticker =
-      networkConfigurationsByChainId?.[chainId as HexString].nativeCurrency;
+      networkConfigurationsByChainId?.[chainId as Hex].nativeCurrency;
     const conversionRateByTicker = selectConversionRateByTicker(state, ticker);
     const chainBalances = tokenBalances[selectedAddress]?.[chainId] || {};
-    const tokenExchangeRateByChainId = tokenExchangeRates[chainId as HexString];
+    const tokenExchangeRateByChainId = tokenExchangeRates[chainId as Hex];
 
     // Add non-native tokens if they exist for this chain
     tokensByChain[chainId] = userTokens.map((token) => {
-      const tokenAddress = token.address as HexString;
+      const tokenAddress = token.address as Hex;
       const tokenExchangeRateByTokenAddress =
         tokenExchangeRateByChainId[tokenAddress];
 
@@ -170,7 +171,7 @@ export function getSelectedAccountTokensAcrossChains(state: RootState): {
     // Add native token if it exists for this chain
     const nativeBalance = nativeTokenBalancesByChainId[chainId];
     if (nativeBalance) {
-      const nativeTokenInfo = getNativeTokenInfo(state, chainId as HexString);
+      const nativeTokenInfo = getNativeTokenInfo(state, chainId as Hex);
 
       // Calculate native token balance
       const nativeBalanceFormatted = renderFromWei(nativeBalance);
