@@ -52,7 +52,6 @@ import {
   AddressBookControllerEvents,
   AddressBookControllerState,
 } from '@metamask/address-book-controller';
-import { BaseState } from '@metamask/base-controller';
 import { ComposableController } from '@metamask/composable-controller';
 import {
   KeyringController,
@@ -376,13 +375,15 @@ type GlobalEvents =
 type PermissionsByRpcMethod = ReturnType<typeof getPermissionSpecifications>;
 type Permissions = PermissionsByRpcMethod[keyof PermissionsByRpcMethod];
 
+type NonControllerEmptyState = Record<never, never>;
+
 // Interfaces are incompatible with our controllers and data types by default.
 // Adding an index signature fixes this, but at the cost of widening the type unnecessarily.
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export type EngineState = {
   AccountTrackerController: AccountTrackerControllerState;
   AddressBookController: AddressBookControllerState;
-  AssetsContractController: BaseState;
+  AssetsContractController: NonControllerEmptyState;
   NftController: NftControllerState;
   TokenListController: TokenListState;
   CurrencyRateController: CurrencyRateState;
@@ -397,8 +398,8 @@ export type EngineState = {
   SwapsController: SwapsState;
   GasFeeController: GasFeeState;
   TokensController: TokensControllerState;
-  TokenDetectionController: BaseState;
-  NftDetectionController: BaseState;
+  TokenDetectionController: NonControllerEmptyState;
+  NftDetectionController: NonControllerEmptyState;
   ///: BEGIN:ONLY_INCLUDE_IF(preinstalled-snaps,external-snaps)
   SnapController: PersistedSnapControllerState;
   SnapsRegistry: SnapsRegistryState;
@@ -512,6 +513,7 @@ export class Engine {
   /**
    * ComposableController reference containing all child controllers
    */
+  // @ts-expect-error - TODO: Update `@metamask/composable-controller` to handle input containing non-controllers with empty state
   datamodel: ComposableController<EngineState, Controllers[keyof Controllers]>;
 
   /**
@@ -1749,6 +1751,7 @@ export class Engine {
 
     this.datamodel = new ComposableController<
       EngineState,
+      // @ts-expect-error - TODO: Update `@metamask/composable-controller` to handle input containing non-controllers with empty state
       Controllers[keyof Controllers]
     >({
       controllers,
