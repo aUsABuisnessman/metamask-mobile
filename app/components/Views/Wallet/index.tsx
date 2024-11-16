@@ -71,7 +71,7 @@ import Text, {
 import { useMetrics } from '../../../components/hooks/useMetrics';
 import { RootState } from '../../../reducers';
 import usePrevious from '../../hooks/usePrevious';
-import { selectSelectedInternalAccountFormattedAddress } from '../../../selectors/accountsController';
+import { selectSelectedInternalAccount } from '../../../selectors/accountsController';
 import { selectAccountBalanceByChainId } from '../../../selectors/accountTrackerController';
 import {
   hideNftFetchingLoadingIndicator as hideNftFetchingLoadingIndicatorAction,
@@ -179,9 +179,7 @@ const Wallet = ({
   /**
    * A string that represents the selected address
    */
-  const selectedAddress = useSelector(
-    selectSelectedInternalAccountFormattedAddress,
-  );
+  const selectedInternalAccount = useSelector(selectSelectedInternalAccount);
   /**
    * An array that represents the user tokens
    */
@@ -406,7 +404,7 @@ const Wallet = ({
     navigation.setOptions(
       getWalletNavbarOptions(
         walletRef,
-        selectedAddress || '',
+        selectedInternalAccount || '',
         accountName,
         accountAvatarType,
         networkName,
@@ -422,7 +420,7 @@ const Wallet = ({
     );
     /* eslint-disable-next-line */
   }, [
-    selectedAddress,
+    selectedInternalAccount,
     accountName,
     accountAvatarType,
     navigation,
@@ -625,7 +623,7 @@ const Wallet = ({
   return (
     <ErrorBoundary navigation={navigation} view="Wallet">
       <View style={baseStyles.flexGrow}>
-        {selectedAddress ? renderContent() : renderLoader()}
+        {selectedInternalAccount ? renderContent() : renderLoader()}
 
         {renderOnboardingWizard()}
       </View>
