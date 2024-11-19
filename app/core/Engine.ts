@@ -379,6 +379,11 @@ type Permissions = PermissionsByRpcMethod[keyof PermissionsByRpcMethod];
 
 type NonControllerEmptyState = Record<never, never>;
 
+type NonControllers =
+  | AssetsContractController
+  | NftDetectionController
+  | TokenDetectionController;
+
 // Interfaces are incompatible with our controllers and data types by default.
 // Adding an index signature fixes this, but at the cost of widening the type unnecessarily.
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
@@ -515,8 +520,10 @@ export class Engine {
   /**
    * ComposableController reference containing all child controllers
    */
-  // @ts-expect-error - TODO: Update `@metamask/composable-controller` to handle input containing non-controllers with empty state
-  datamodel: ComposableController<EngineState, Controllers[keyof Controllers]>;
+  datamodel: ComposableController<
+    Omit<EngineState, NonControllers['name']>,
+    Controllers[keyof Controllers]
+  >;
 
   /**
    * Object containing the info for the latest incoming tx block
@@ -1752,8 +1759,7 @@ export class Engine {
     }
 
     this.datamodel = new ComposableController<
-      EngineState,
-      // @ts-expect-error - TODO: Update `@metamask/composable-controller` to handle input containing non-controllers with empty state
+      Omit<EngineState, NonControllers['name']>,
       Controllers[keyof Controllers]
     >({
       controllers,
@@ -2384,7 +2390,6 @@ export default {
     const {
       AccountTrackerController,
       AddressBookController,
-      AssetsContractController,
       NftController,
       TokenListController,
       CurrencyRateController,
@@ -2400,8 +2405,6 @@ export default {
       SwapsController,
       GasFeeController,
       TokensController,
-      TokenDetectionController,
-      NftDetectionController,
       ///: BEGIN:ONLY_INCLUDE_IF(preinstalled-snaps,external-snaps)
       SnapController,
       SubjectMetadataController,
@@ -2432,7 +2435,6 @@ export default {
     return {
       AccountTrackerController,
       AddressBookController,
-      AssetsContractController,
       NftController,
       TokenListController,
       CurrencyRateController: modifiedCurrencyRateControllerState,
@@ -2448,8 +2450,6 @@ export default {
       SmartTransactionsController,
       SwapsController,
       GasFeeController,
-      TokenDetectionController,
-      NftDetectionController,
       ///: BEGIN:ONLY_INCLUDE_IF(preinstalled-snaps,external-snaps)
       SnapController,
       SubjectMetadataController,
